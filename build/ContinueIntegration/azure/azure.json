@@ -11,6 +11,7 @@
       }
     },
   "variables": {
+    "deploymentScriptUrl": "",
     "storageAccountName": "[concat( 'aegmanager', uniqueString(resourceGroup().id) )]"
   },
   "resources": [
@@ -61,7 +62,7 @@
             "value": "if this is really a secret, don't put it here... in plain text..."
           }
         ],
-        "primaryScriptUri": "...",
+        "primaryScriptUri": "[variables('deploymentScriptUrl')]",
         "supportingScriptUris": [],
         "timeout": "PT30M",
         "cleanupPreference": "OnSuccess",

@@ -19,13 +19,21 @@ stages:
       vmImage: 'windows-2019'
 
     variables:
-      buildConfiguration: 'Release'
+    - name: "variables.deploymentScriptUrl"
+      value: "https://dotnetdevops.blob.core.windows.net/releases/EventGridManager/1.0.0-ci-$(Build.BuildNumber)/azure/deployment.sh"
 
     steps:
     - task: CopyFiles@2
       inputs:
-        contents: 'build/ContinueIntegration/azure/**'
+        sourceFolder: 'build/ContinueIntegration/azure'
+        contents: '**'
         targetFolder: $(Build.ArtifactStagingDirectory)/azure
+
+    - task: FileTransform@1
+      inputs:
+        folderPath: '$(Build.ArtifactStagingDirectory)'      
+        fileType: json
+        targetFiles: '*/**/azure.json'
 
     - task: AzureFileCopy@4
       inputs: 
