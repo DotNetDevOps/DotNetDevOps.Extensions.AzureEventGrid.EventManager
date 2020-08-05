@@ -14,9 +14,21 @@ stages:
   displayName: "Building for CI"
   dependsOn: []
   jobs:
+  #- job: Build
+  #  pool:
+  #    vmImage: 'ubuntu-latest'
+      
+  #  steps:
+    #- script: |
+    #    sudo apt-get update -y
+    #    sudo apt-get install -y dos2unix
+    #    dos2unix $(Build.ArtifactStagingDirectory)/azure/*.sh
+    #    chmod +x $(Build.ArtifactStagingDirectory)/azure/*.sh
+    #  displayName: 'Command Line Script'
+
   - job: Build
     pool:
-      vmImage: 'ubuntu-latest'
+      vmImage: 'windows-2019'
 
     variables:
     - name: "variables.deploymentScriptUrl"
@@ -29,12 +41,7 @@ stages:
         contents: '**'
         targetFolder: $(Build.ArtifactStagingDirectory)/azure
 
-    - script: |
-        sudo apt-get update -y
-        sudo apt-get install -y dos2unix
-        dos2unix $(Build.ArtifactStagingDirectory)/azure/*.sh
-        chmod +x $(Build.ArtifactStagingDirectory)/azure/*.sh
-      displayName: 'Command Line Script'
+
 
     - task: FileTransform@1
       inputs:
