@@ -35,3 +35,13 @@ stages:
         storage: 'dotnetdevops'
         ContainerName: 'releases'
         BlobPrefix: 'EventGridManager/1.0.0-ci-$(Build.BuildNumber)/'
+
+    - task: AzureFileCopy@4
+      inputs: 
+        SourcePath: '$(Build.ArtifactStagingDirectory)/**'
+        azureSubscription: 'azure'
+        Destination: 'AzureBlob'
+        storage: 'dotnetdevops'
+        ContainerName: 'releases'
+        BlobPrefix: 'EventGridManager/latest/'
+
