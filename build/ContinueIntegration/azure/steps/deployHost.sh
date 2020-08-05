@@ -15,5 +15,5 @@ functionsettings=(
 	"PackageVersion=${PackageVersion}"
 )
 
-source utils/helper_azurefunction.sh;
+source azure/utils/helper_azurefunction.sh;
 
