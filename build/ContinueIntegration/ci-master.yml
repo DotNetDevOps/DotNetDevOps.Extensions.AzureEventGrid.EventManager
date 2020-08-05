@@ -84,8 +84,8 @@ stages:
     - script: |
         sudo apt-get update -y
         sudo apt-get install -y dos2unix
-        dos2unix $(Build.ArtifactStagingDirectory)/**.sh
-        chmod +x $(Build.ArtifactStagingDirectory)/**.sh
+        find $(Build.ArtifactStagingDirectory) -type f -iname "*.sh" -print0 | xargs -0 dos2unix        
+        find $(Build.ArtifactStagingDirectory) -type f -iname "*.sh" -exec chmod +x {} \;
       displayName: 'Command Line Script'
 
 
