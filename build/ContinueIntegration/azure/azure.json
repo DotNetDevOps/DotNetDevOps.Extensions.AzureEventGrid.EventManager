@@ -12,7 +12,9 @@
     },
   "variables": {
     "deploymentScriptUrl": "",
-    "storageAccountName": "[concat( 'aegmanager', uniqueString(resourceGroup().id) )]"
+    "storageAccountName": "[concat( 'aegmanager', uniqueString(resourceGroup().id) )]",
+    "Contributor": "[concat('/subscriptions/', subscription().subscriptionId, '/providers/Microsoft.Authorization/roleDefinitions/', 'b24988ac-6180-42a0-ab88-20f7382dd24c')]"
+
   },
   "resources": [
     {
@@ -33,16 +35,25 @@
       "location": "[parameters('location')]"
     },
     {
+      "type": "Microsoft.Authorization/roleAssignments",
+      "apiVersion": "2018-09-01-preview",
+      "name": "3a2b4426-f4f9-4227-a1c8-4a08b6c7efe0",
+      "properties": {
+        "roleDefinitionId": "[variables('Contributor')]",
+        "principalId": "[reference(resourceId('Microsoft.ManagedIdentity/userAssignedIdentities/', 'EventGridManagerDeploymentIdentity'), '2018-11-30').principalId]"
+      }
+    },
+    {
       "dependsOn": [ "EventGridManagerDeploymentIdentity" ],
       "type": "Microsoft.Resources/deploymentScripts",
       "apiVersion": "2019-10-01-preview",
       "name": "EventGridManagerRunDeployment",
-      "location": "[resourceGroup().location]",
+      "location": "[parameters('location')]",
       "kind": "AzureCLI",
       "identity": {
         "type": "userAssigned",
         "userAssignedIdentities": {
-          "[reference('EventGridManagerDeploymentIdentity').id]": {}
+          "[resourceId('Microsoft.ManagedIdentity/userAssignedIdentities','EventGridManagerDeploymentIdentity')]": {}
         }
       },
       "properties": {
@@ -52,7 +63,7 @@
         },
         "storageAccountSettings": {
           "storageAccountName": "[variables('storageAccountName')]",
-          "storageAccountKey": "[listKeys(reference(variables('storageAccountName')).id, '2019-04-01').keys[0].value]"
+          "storageAccountKey": "[listKeys(resourceId('Microsoft.Storage/storageAccounts',variables('storageAccountName')), '2019-04-01').keys[0].value]"
         },
         "azCliVersion": "2.8.0",
         "arguments": "-name \\\"John Dole\\\"",
