@@ -10,9 +10,65 @@ trigger:
     - releases/*
 
 stages:
-- stage: build_ci
-  displayName: "Building for CI"
+- stage: build_front
+  displayName: "Building Frontend"
+  jobs:
+  - job: Build
+    pool:
+      vmImage: 'ubuntu-latest'
+    
+    steps:
+    - script: |
+        npm install
+        npm run generate
+      workingDirectory: apps/DotNetDevOps.Extensions.AzureEventGrid.EventManagerApp
+      displayName: Building Front End
+    - task: PublishPipelineArtifact@0
+      inputs:
+        artifactName: 'front'
+        targetPath: 'apps/DotNetDevOps.Extensions.AzureEventGrid.EventManagerApp/dist'
+
+- stage: build_functions
+  displayName: "Building Functions"
   dependsOn: []
+  jobs:
+  - job: Build
+    pool:
+      vmImage: 'windows-2019'
+
+    steps: 
+    # .NET Core
+    # Restore NuGet packages.
+    - task: DotNetCoreCLI@2
+      inputs:
+        command: 'restore'
+        projects: '**/*.csproj'
+        feedsToUse: config
+        nugetConfigPath: $(build.sourcesDirectory)/nuget.config # you should always have a NuGet.config file!
+        #verbosityRestore: 'detailed' # Options: quiet, minimal, normal, detailed, diagnostic
+    - task: DotNetCoreCLI@2
+      displayName: Build
+      inputs:
+        command: build
+        projects: '**/*.csproj'
+        configuration: '$(buildConfiguration)'
+    - task: DotNetCoreCLI@2
+      displayName: Publish
+      inputs:
+        command: publish
+        publishWebProjects: false
+        projects: 'functions/**/*.csproj'
+        configuration: '$(buildConfiguration)'
+        arguments: '--output $(Build.ArtifactStagingDirectory)'
+
+    - task: PublishPipelineArtifact@0
+      inputs:
+        artifactName: 'functions'
+        targetPath: '$(Build.ArtifactStagingDirectory)'
+
+- stage: publish
+  displayName: "Publishing"
+  dependsOn: [build_front, build_functions]
   jobs:
   - job: Build
     pool:

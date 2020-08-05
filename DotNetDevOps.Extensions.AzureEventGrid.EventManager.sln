@@ -1,0 +1,58 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.29613.14
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DotNetDevOps.Extensions.AzureEventGrid.EventManagerApp", "apps\DotNetDevOps.Extensions.AzureEventGrid.EventManagerApp\DotNetDevOps.Extensions.AzureEventGrid.EventManagerApp.csproj", "{0974FFED-B358-454F-8EA2-89B77E251CE2}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "apps", "apps", "{4D388591-7709-4834-84FB-BC7C3D8DD8AD}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "functions", "functions", "{78C5B3CB-1266-4094-807E-63F7F056CE99}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DotNetDevOps.Extensions.AzureEventGrid.EventManagerApi", "functions\DotNetDevOps.Extensions.AzureEventGrid.EventManagerApi\DotNetDevOps.Extensions.AzureEventGrid.EventManagerApi.csproj", "{C84318F8-F431-474A-87AD-178533679A9A}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DotNetDevOps.Extensions.AzureEventGrid.EventManagerHost", "functions\DotNetDevOps.Extensions.AzureEventGrid.EventManagerHost\DotNetDevOps.Extensions.AzureEventGrid.EventManagerHost.csproj", "{620C9C37-5802-4D4B-B6A5-CF2B50F3696D}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{FBBF5240-3070-4B9F-AB9E-8F8A0654F680}"
+	ProjectSection(SolutionItems) = preProject
+		nuget.config = nuget.config
+		README.md = README.md
+	EndProjectSection
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ContinueIntegration", "build\ContinueIntegration\ContinueIntegration.csproj", "{9266C6A3-EDA4-437D-BA59-986F5BE5DA3D}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{0974FFED-B358-454F-8EA2-89B77E251CE2}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0974FFED-B358-454F-8EA2-89B77E251CE2}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0974FFED-B358-454F-8EA2-89B77E251CE2}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0974FFED-B358-454F-8EA2-89B77E251CE2}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C84318F8-F431-474A-87AD-178533679A9A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C84318F8-F431-474A-87AD-178533679A9A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C84318F8-F431-474A-87AD-178533679A9A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C84318F8-F431-474A-87AD-178533679A9A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{620C9C37-5802-4D4B-B6A5-CF2B50F3696D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{620C9C37-5802-4D4B-B6A5-CF2B50F3696D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{620C9C37-5802-4D4B-B6A5-CF2B50F3696D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{620C9C37-5802-4D4B-B6A5-CF2B50F3696D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{9266C6A3-EDA4-437D-BA59-986F5BE5DA3D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9266C6A3-EDA4-437D-BA59-986F5BE5DA3D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9266C6A3-EDA4-437D-BA59-986F5BE5DA3D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{9266C6A3-EDA4-437D-BA59-986F5BE5DA3D}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{0974FFED-B358-454F-8EA2-89B77E251CE2} = {4D388591-7709-4834-84FB-BC7C3D8DD8AD}
+		{C84318F8-F431-474A-87AD-178533679A9A} = {78C5B3CB-1266-4094-807E-63F7F056CE99}
+		{620C9C37-5802-4D4B-B6A5-CF2B50F3696D} = {78C5B3CB-1266-4094-807E-63F7F056CE99}
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {617D2560-22ED-46A2-AC6D-220CAECA9467}
+	EndGlobalSection
+EndGlobal

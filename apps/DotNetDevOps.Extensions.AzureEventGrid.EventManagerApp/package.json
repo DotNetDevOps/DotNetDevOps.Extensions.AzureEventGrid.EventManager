@@ -1,0 +1,38 @@
+{
+  "name": "org.dotnetdevops.eventmanager",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Azure EventGrid Event Manager",
+  "author": "Poul Kjeldager <poul@kjeldager.com>",
+  "scripts": {
+    "build": "nuxt-ts build",
+    "dev": "cross-env authority=https://io-board.eu.ngrok.io/identity resourceApi=https://io-board.eu.ngrok.io nuxt-ts --port 3001",
+    "generate": "nuxt-ts generate",
+    "precommit": "npm run lint",
+    "start": "nuxt-ts start --port 3001"
+  },
+  "dependencies": {
+    "@microsoft/signalr": "3.1.6",
+    "@nuxtjs/pwa": "3.0.0-beta.20",
+    "fibers": "^5.0.0",
+    "moment": "2.27.0",
+    "nuxt": "2.13.3",
+    "pako": "1.0.11",
+    "vue-tsx-support": "2.3.3",
+    "vuetify": "2.3.6"
+  },
+  "devDependencies": {
+    "cross-env": "7.0.2",
+    "@nuxtjs/svg-sprite": "0.4.11",
+    "less-loader": "6.2.0",
+    "less": "3.12.2",
+    "@nuxt/typescript-build": "2.0.2",
+    "@nuxt/typescript-runtime": "1.0.0",
+    "@nuxt/types": "2.14.0",
+    "nuxt-property-decorator": "2.7.2",
+    "@nuxtjs/vuetify": "1.11.2",
+    "ts-node": "8.10.2",
+    "typescript": "3.9.7",
+    "webpack-node-externals": "2.5.0"
+  }
+}
