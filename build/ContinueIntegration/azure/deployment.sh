@@ -65,13 +65,18 @@ az storage account create -n ${accountName} --sku Standard_LRS --kind StorageV2
 
 
 #SetOrGet the storage key into a secret named AzureWebJobsStorage
-current_account_fromvault_conn_string=$(az keyvault secret show --name storage-${accountName} --vault-name ${keyVaultName} --query 'value' -o tsv)
+doSecretExists=$(az keyvault secret list --vault-name $keyVaultName --query "[?name == 'storage-${accountName}']")
 current_env_conn_string=$(az storage account show-connection-string -n ${accountName} --query 'connectionString' -o tsv)
 
-if [ "$current_account_fromvault_conn_string" = "$current_env_conn_string" ]; then
-secretUriWithVersion=$(az keyvault secret show --name storage-${accountName} --vault-name ${keyVaultName} --query 'id' -o tsv)
-else
-secretUriWithVersion=$(az keyvault secret set --name storage-${accountName} --vault-name ${keyVaultName} --value ${current_env_conn_string} | jq -r '.id')
+if [[ "${doKeyVaultExist}" = "[]" ]]; then
+	secretUriWithVersion=$(az keyvault secret set --name storage-${accountName} --vault-name ${keyVaultName} --value ${current_env_conn_string} | jq -r '.id')
+else 
+	current_account_fromvault_conn_string=$(az keyvault secret show --name storage-${accountName} --vault-name ${keyVaultName} --query 'value' -o tsv)
+	if [ "$current_account_fromvault_conn_string" = "$current_env_conn_string" ]; then
+		secretUriWithVersion=$(az keyvault secret show --name storage-${accountName} --vault-name ${keyVaultName} --query 'id' -o tsv)
+	else
+	secretUriWithVersion=$(az keyvault secret set --name storage-${accountName} --vault-name ${keyVaultName} --value ${current_env_conn_string} | jq -r '.id')
+	fi
 fi
 
 source steps/deployHost.sh;

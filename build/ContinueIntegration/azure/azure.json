@@ -142,7 +142,7 @@
           },
           {
             "name": "UserManagedPrincipalId",
-            "value": "[resourceId('Microsoft.ManagedIdentity/userAssignedIdentities','EventGridManagerDeploymentIdentity')]"
+            "value": "[reference(resourceId('Microsoft.ManagedIdentity/userAssignedIdentities/', 'EventGridManagerDeploymentIdentity'), '2018-11-30').principalId]"
           }
         ],
         "primaryScriptUri": "[variables('deploymentScriptUrl')]",
