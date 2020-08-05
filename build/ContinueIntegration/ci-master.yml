@@ -1,0 +1,37 @@
+﻿name: '$(date:yyyyMMdd)$(rev:-rr)'
+
+
+trigger:
+  batch: true
+  branches:
+    include:
+    - master
+    - dev
+    - releases/*
+
+stages:
+- stage: build_ci
+  displayName: "Building for CI"
+  dependsOn: []
+  jobs:
+  - job: Build
+    pool:
+      vmImage: 'windows-2019'
+
+    variables:
+      buildConfiguration: 'Release'
+
+    steps:
+    - task: CopyFiles@2
+      inputs:
+        contents: 'build/ContinueIntegration/azure/**'
+        targetFolder: $(Build.ArtifactStagingDirectory)/azure
+
+    - task: AzureFileCopy@4
+      inputs: 
+        SourcePath: '$(Build.ArtifactStagingDirectory)/**'
+        azureSubscription: 'azure'
+        Destination: 'AzureBlob'
+        storage: 'dotnetdevops'
+        ContainerName: 'releases'
+        BlobPrefix: 'EventGridManager/1.0.0-ci-$(Build.BuildNumber)/'
