@@ -46,6 +46,7 @@ keyVaultId=$(az keyvault create \
 	--enabled-for-template-deployment | jq -r '.id')
 fi
 
+az keyvault set-policy --name ${keyVaultName} --secret-permissions get --object-id ${UserManagedPrincipalId}
 
 #Create Storage Account (all lower case)
 accountName=$(echo "${BusinessPrefix}${projectName}${locationShort}${projectEnv}" | sed 's/-//g' | awk '{print tolower($0)}')

@@ -139,6 +139,10 @@
           {
             "name": "publishFolder",
             "value": "functions"
+          },
+          {
+            "name": "UserManagedPrincipalId",
+            "value": "[resourceId('Microsoft.ManagedIdentity/userAssignedIdentities','EventGridManagerDeploymentIdentity')]"
           }
         ],
         "primaryScriptUri": "[variables('deploymentScriptUrl')]",
