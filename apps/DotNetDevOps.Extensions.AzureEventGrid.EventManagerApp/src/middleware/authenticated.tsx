@@ -5,10 +5,10 @@ import auth from "../plugins/auth";
 import { AuthService } from "../plugins/auth";
 
  
-export default async function ({ store, redirect, route, app }: { store,redirect,route, app: { $auth: AuthService }}) {
+export default async function ({ store, redirect, route, app, router }: { store, redirect, route, router, app: { $auth: AuthService }}) {
     console.log(arguments);
     console.log(route);
-
+    console.log(app);
 
     let usermanager = app.$auth.userManager;
     if (route.path === "/signin/") {
@@ -20,6 +20,9 @@ export default async function ({ store, redirect, route, app }: { store,redirect
     if (route.name === "account/login")
         return;
 
+    if (route.name === "configuration")
+        return;
+
     app.$auth.user = await app.$auth.userManager.getAppUser();
 
     if (!app.$auth.user) {
@@ -28,7 +31,7 @@ export default async function ({ store, redirect, route, app }: { store,redirect
             method: "GET",
             
         })
-
+        console.log(isConfigured);
         if (isConfigured.status == 404) {
             return redirect({ name: "configuration", query: { redirect_url: route.path } })
         }
