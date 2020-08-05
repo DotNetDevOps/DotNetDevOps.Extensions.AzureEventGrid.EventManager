@@ -2,20 +2,50 @@
   "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
   "contentVersion": "1.0.0.0",
   "parameters": {
-      "location": {
-        "type": "string",
-        "defaultValue": "[resourceGroup().location]",
-        "metadata": {
-          "description": "Location for all resources."
-        }
+    "projectName": {
+      "type": "string",
+      "defaultValue": "AEG-EventManager"
+    },
+    "projectEnv": {
+      "type": "string",
+      "defaultValue": "prod",
+      "allowedValues": [ "dev", "test", "prod", "uat" ]
+    },
+    "location": {
+      "type": "string",
+      "defaultValue": "[resourceGroup().location]",
+      "metadata": {
+        "description": "Location for all resources."
       }
     },
+    "BusinessPrefix": {
+      "type": "string",
+      "metadata": {
+        "description": "Use a 3-4 letter prefix for global unique named resources, like company short word"
+      }
+    },
+    "AIResourceNamePrefix": {
+      "type": "string",
+      "defaultValue": "AI",
+      "metadata": {
+        "description": "A prefix used in naming application insights resources"
+      }
+    },
+    "KeyVaultResourceNamePrefix": {
+      "type": "string",
+      "defaultValue": "KeyV",
+      "metadata": {
+        "description": "A prefix used in naming Key Vaults resources"
+      }
+    }
+    
+  },
   "variables": {
     "deploymentScriptUrl": "",
     "deploymentScriptUtils": "",
     "storageAccountName": "[concat( 'aegmanager', uniqueString(resourceGroup().id) )]",
-    "Contributor": "[concat('/subscriptions/', subscription().subscriptionId, '/providers/Microsoft.Authorization/roleDefinitions/', 'b24988ac-6180-42a0-ab88-20f7382dd24c')]"
-
+    "Contributor": "[concat('/subscriptions/', subscription().subscriptionId, '/providers/Microsoft.Authorization/roleDefinitions/', 'b24988ac-6180-42a0-ab88-20f7382dd24c')]",
+    "regionAbbreviation": "[replace(replace(replace(replace(resourceGroup().location,'northeurope','neu'), 'westeurope', 'weu'), 'uksouth', 'uks'), 'ukwest', 'ukw')]"
   },
   "resources": [
     {
@@ -73,6 +103,42 @@
           {
             "name": "message",
             "value": "if this is really a secret, don't put it here... in plain text..."
+          },
+          {
+            "name": "projectName",
+            "value": "[parameters('projectName')]"
+          },
+          {
+            "name": "projectEnv",
+            "value": "[parameters('projectEnv')]"
+          },
+          {
+            "name": "rgname",
+            "value": "[resourceGroup().name]"
+          },
+          {
+            "name": "AIPrefix",
+            "value": "[parameters('AIResourceNamePrefix')]"
+          },
+          {
+            "name": "KeyVaultResourceNamePrefix",
+            "value": "[parameters('KeyVaultResourceNamePrefix')]"
+          },
+          {
+            "name": "prefix",
+            "value": "[parameters('BusinessPrefix')]"
+          },
+          {
+            "name": "locationShort",
+            "value": "[variables('regionAbbreviation')]"
+          },
+          {
+            "name": "location",
+            "value": "[parameters('location')]"
+          },
+          {
+            "name": "publishFolder",
+            "value": "functions"
           }
         ],
         "primaryScriptUri": "[variables('deploymentScriptUrl')]",
