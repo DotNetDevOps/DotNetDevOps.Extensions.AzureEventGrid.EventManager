@@ -41,11 +41,13 @@
     
   },
   "variables": {
-    "version":"",
+    "version": "",
     "deploymentScriptUrl": "",
     "deploymentScriptUtils": "",
     "storageAccountName": "[concat( 'aegmanager', uniqueString(resourceGroup().id) )]",
     "Contributor": "[concat('/subscriptions/', subscription().subscriptionId, '/providers/Microsoft.Authorization/roleDefinitions/', 'b24988ac-6180-42a0-ab88-20f7382dd24c')]",
+    "Owner": "[concat('/subscriptions/', subscription().subscriptionId, '/providers/Microsoft.Authorization/roleDefinitions/', '8e3af657-a8ff-443c-a75c-2fe8c4bcb635')]",
+
     "regionAbbreviation": "[replace(replace(replace(replace(resourceGroup().location,'northeurope','neu'), 'westeurope', 'weu'), 'uksouth', 'uks'), 'ukwest', 'ukw')]"
   },
   "resources": [
@@ -72,7 +74,7 @@
       "apiVersion": "2018-09-01-preview",
       "name": "3a2b4426-f4f9-4227-a1c8-4a08b6c7efe0",
       "properties": {
-        "roleDefinitionId": "[variables('Contributor')]",
+        "roleDefinitionId": "[variables('Owner')]",
         "principalId": "[reference(resourceId('Microsoft.ManagedIdentity/userAssignedIdentities/', 'EventGridManagerDeploymentIdentity'), '2018-11-30').principalId]"
       }
     },
