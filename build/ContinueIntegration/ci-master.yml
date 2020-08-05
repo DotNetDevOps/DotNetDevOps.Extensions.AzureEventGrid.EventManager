@@ -14,26 +14,10 @@ stages:
   displayName: "Building for CI"
   dependsOn: []
   jobs:
-  #- job: Build
-  #  pool:
-  #    vmImage: 'ubuntu-latest'
-      
-  #  steps:
-    #- script: |
-    #    sudo apt-get update -y
-    #    sudo apt-get install -y dos2unix
-    #    dos2unix $(Build.ArtifactStagingDirectory)/azure/*.sh
-    #    chmod +x $(Build.ArtifactStagingDirectory)/azure/*.sh
-    #  displayName: 'Command Line Script'
-
   - job: Build
     pool:
-      vmImage: 'windows-2019'
-
-    variables:
-    - name: "variables.deploymentScriptUrl"
-      value: "https://dotnetdevops.blob.core.windows.net/releases/EventGridManager/1.0.0-ci-$(Build.BuildNumber)/azure/deployment.sh"
-
+      vmImage: 'ubuntu-latest'
+      
     steps:
     - task: CopyFiles@2
       inputs:
@@ -41,17 +25,37 @@ stages:
         contents: '**'
         targetFolder: $(Build.ArtifactStagingDirectory)/azure
 
+    - script: |
+        sudo apt-get update -y
+        sudo apt-get install -y dos2unix
+        dos2unix $(Build.ArtifactStagingDirectory)/azure/*.sh
+        chmod +x $(Build.ArtifactStagingDirectory)/azure/*.sh
+      displayName: 'Command Line Script'
+    - task: PublishPipelineArtifact@0
+      inputs:
+        artifactName: 'azure'
+        targetPath: '$(Build.ArtifactStagingDirectory)'
 
+  - job: Publish
+    dependsOn: Build
+    pool:
+      vmImage: 'windows-2019'
 
+    variables:
+    - name: "variables.deploymentScriptUrl"
+      value: "https://dotnetdevops.blob.core.windows.net/releases/EventGridManager/1.0.0-ci-$(Build.BuildNumber)/azure/deployment.sh"
+
+    steps: 
+    - task: DownloadPipelineArtifact@2
     - task: FileTransform@1
       inputs:
-        folderPath: '$(Build.ArtifactStagingDirectory)'      
+        folderPath: '$(Pipeline.Workspace)'      
         fileType: json
         targetFiles: '*/**/azure.json'
 
     - task: AzureFileCopy@4
       inputs: 
-        SourcePath: '$(Build.ArtifactStagingDirectory)/**'
+        SourcePath: '$(Pipeline.Workspace)/**'
         azureSubscription: 'azure'
         Destination: 'AzureBlob'
         storage: 'dotnetdevops'
@@ -60,7 +64,7 @@ stages:
 
     - task: AzureFileCopy@4
       inputs: 
-        SourcePath: '$(Build.ArtifactStagingDirectory)/**'
+        SourcePath: '$(Pipeline.Workspace)/**'
         azureSubscription: 'azure'
         Destination: 'AzureBlob'
         storage: 'dotnetdevops'
