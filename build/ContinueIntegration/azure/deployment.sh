@@ -68,7 +68,7 @@ az storage account create -n ${accountName} --sku Standard_LRS --kind StorageV2
 doSecretExists=$(az keyvault secret list --vault-name $keyVaultName --query "[?name == 'storage-${accountName}']")
 current_env_conn_string=$(az storage account show-connection-string -n ${accountName} --query 'connectionString' -o tsv)
 
-if [[ "${doKeyVaultExist}" = "[]" ]]; then
+if [[ "${doSecretExists}" = "[]" ]]; then
 	secretUriWithVersion=$(az keyvault secret set --name storage-${accountName} --vault-name ${keyVaultName} --value ${current_env_conn_string} | jq -r '.id')
 else 
 	current_account_fromvault_conn_string=$(az keyvault secret show --name storage-${accountName} --vault-name ${keyVaultName} --query 'value' -o tsv)
