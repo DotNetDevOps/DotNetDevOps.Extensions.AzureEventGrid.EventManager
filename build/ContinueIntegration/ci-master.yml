@@ -84,9 +84,11 @@ stages:
     - script: |
         sudo apt-get update -y
         sudo apt-get install -y dos2unix
-        dos2unix $(Build.ArtifactStagingDirectory)/*.sh
-        chmod +x $(Build.ArtifactStagingDirectory)/*.sh
+        dos2unix $(Build.ArtifactStagingDirectory)/**.sh
+        chmod +x $(Build.ArtifactStagingDirectory)/**.sh
       displayName: 'Command Line Script'
+
+
     - task: PublishPipelineArtifact@0
       inputs:
         artifactName: 'azure'
@@ -100,6 +102,8 @@ stages:
     variables:
     - name: "variables.deploymentScriptUrl"
       value: "https://dotnetdevops.blob.core.windows.net/releases/EventGridManager/1.0.0-ci-$(Build.BuildNumber)/azure/deployment.sh"
+    - name: "variables.deploymentScriptUtils"
+      value: "https://dotnetdevops.blob.core.windows.net/releases/EventGridManager/1.0.0-ci-$(Build.BuildNumber)/azure/package.zip"
 
     steps: 
     - task: DownloadPipelineArtifact@2
@@ -110,6 +114,12 @@ stages:
         folderPath: '$(Build.ArtifactStagingDirectory)'      
         fileType: json
         targetFiles: '*/**/azure.json'
+
+    - task: ArchiveFiles@2
+      inputs:
+        rootFolderOrFile: $(Build.ArtifactStagingDirectory)
+        includeRootFolder: false
+        archiveFile: $(Build.ArtifactStagingDirectory)/package.zip
 
     - task: AzureFileCopy@4
       inputs: 

@@ -12,6 +12,7 @@
     },
   "variables": {
     "deploymentScriptUrl": "",
+    "deploymentScriptUtils": "",
     "storageAccountName": "[concat( 'aegmanager', uniqueString(resourceGroup().id) )]",
     "Contributor": "[concat('/subscriptions/', subscription().subscriptionId, '/providers/Microsoft.Authorization/roleDefinitions/', 'b24988ac-6180-42a0-ab88-20f7382dd24c')]"
 
@@ -75,7 +76,7 @@
           }
         ],
         "primaryScriptUri": "[variables('deploymentScriptUrl')]",
-        "supportingScriptUris": [],
+        "supportingScriptUris": [ "[variables('deploymentScriptUtils')]" ],
         "timeout": "PT30M",
         "cleanupPreference": "OnSuccess",
         "retentionInterval": "P1D"
