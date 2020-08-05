@@ -23,7 +23,16 @@ export default async function ({ store, redirect, route, app }: { store,redirect
     app.$auth.user = await app.$auth.userManager.getAppUser();
 
     if (!app.$auth.user) {
-        
+
+        var isConfigured = await fetch('/.well-known/configuration', {
+            method: "GET",
+            
+        })
+
+        if (isConfigured.status == 404) {
+            return redirect({ name: "configuration", query: { redirect_url: route.path } })
+        }
+
         var rsp = await fetch('/.auth/me', {
             method: "GET",
             credentials: "include",

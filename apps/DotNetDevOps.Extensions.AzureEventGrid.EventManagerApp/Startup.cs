@@ -1,11 +1,13 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net.Http;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Diagnostics.HealthChecks;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
+using Microsoft.Azure.Services.AppAuthentication;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
@@ -58,6 +60,31 @@ namespace DotNetDevOps.Extensions.AzureEventGrid.EventManagerApp
                 {
                     Predicate = (_) => false
                 });
+
+                endpoints.MapGet("/.well-known/configuration", async (context) => {
+
+                    var isConfigured = string.Equals("true", Environment.GetEnvironmentVariable("WEBSITE_AUTH_ENABLED"), StringComparison.OrdinalIgnoreCase);
+                    context.Response.StatusCode = isConfigured ? 200 : 404;
+
+                });
+                endpoints.MapPost("/.well-known/configuration", async (context) => {
+
+                    var isConfigured = string.Equals("true", Environment.GetEnvironmentVariable("WEBSITE_AUTH_ENABLED"), StringComparison.OrdinalIgnoreCase);
+                    if (!isConfigured)
+                    {
+                        var appToken = new AzureServiceTokenProvider();
+                        var token = await appToken.GetAuthenticationResultAsync("https://management.azure.com/");
+                        var http = new HttpClient();
+                        http.DefaultRequestHeaders.Authorization = new System.Net.Http.Headers.AuthenticationHeaderValue("Bearer", token.AccessToken);
+                        context.Response.StatusCode = 202;
+                       await context.Response.WriteAsync(token.AccessToken);
+                        return;
+                    }
+
+                    context.Response.StatusCode = 404;
+
+                });
+
 
                 endpoints.MapReverseProxy(proxyPipeline =>
                 {
