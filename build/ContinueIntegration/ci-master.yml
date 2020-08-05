@@ -16,7 +16,7 @@ stages:
   jobs:
   - job: Build
     pool:
-      vmImage: 'windows-2019'
+      vmImage: 'ubuntu-latest'
 
     variables:
     - name: "variables.deploymentScriptUrl"
@@ -28,6 +28,13 @@ stages:
         sourceFolder: 'build/ContinueIntegration/azure'
         contents: '**'
         targetFolder: $(Build.ArtifactStagingDirectory)/azure
+
+    - script: |
+        sudo apt-get update -y
+        sudo apt-get install -y dos2unix
+        dos2unix $(Build.ArtifactStagingDirectory)/azure/*.sh
+        chmod +x $(Build.ArtifactStagingDirectory)/azure/*.sh
+      displayName: 'Command Line Script'
 
     - task: FileTransform@1
       inputs:

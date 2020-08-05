@@ -1,0 +1,2 @@
+
+[![Deploy to Azure](https://aka.ms/deploytoazurebutton)](https://portal.azure.com/#create/Microsoft.Template/uri/https%3A%2F%2Fdotnetdevops.blob.core.windows.net%2Freleases%2FEventGridManager%2Flatest%2Fazure%2Fazure.json)
