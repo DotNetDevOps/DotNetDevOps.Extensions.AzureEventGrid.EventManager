@@ -35,7 +35,7 @@ echo "Configuring ${functionAppName}"
 az functionapp config appsettings set --name ${functionAppName} --resource-group ${rgname} --settings "${functionsettings[@]}"
 
 echo "Deploying ${functionAppName} as zip"
-./retry3.sh az functionapp deployment source config-zip -g ${rgname} -n ${functionAppName} --src "${packagePath}" --timeout 60
+azure/utils/retry3.sh az functionapp deployment source config-zip -g ${rgname} -n ${functionAppName} --src "${packagePath}" --timeout 60
 
 defaultHostName=$(az functionapp show --name ${functionAppName} | jq -r '.defaultHostName')
 echo "Querying liveness endpoint"

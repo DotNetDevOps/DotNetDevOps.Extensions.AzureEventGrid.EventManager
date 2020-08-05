@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Builder;
+using Microsoft.AspNetCore.Diagnostics.HealthChecks;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Configuration;
@@ -26,6 +27,7 @@ namespace DotNetDevOps.Extensions.AzureEventGrid.EventManagerApp
         // For more information on how to configure your application, visit https://go.microsoft.com/fwlink/?LinkID=398940
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddHealthChecks();
             services.AddReverseProxy()
                 .LoadFromConfig(Configuration.GetSection("ReverseProxy"));
         }
@@ -46,6 +48,17 @@ namespace DotNetDevOps.Extensions.AzureEventGrid.EventManagerApp
             app.UseRouting();
             app.UseEndpoints(endpoints =>
             {
+                endpoints.MapHealthChecks("/.well-known/ready", new HealthCheckOptions()
+                {
+                    Predicate = (check) => check.Tags.Contains("ready"),
+                 //   ResponseWriter = Writer
+                });
+
+                endpoints.MapHealthChecks("/.well-known/live", new HealthCheckOptions
+                {
+                    Predicate = (_) => false
+                });
+
                 endpoints.MapReverseProxy(proxyPipeline =>
                 {
 
