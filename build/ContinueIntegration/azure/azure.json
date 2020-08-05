@@ -41,6 +41,7 @@
     
   },
   "variables": {
+    "version":"",
     "deploymentScriptUrl": "",
     "deploymentScriptUtils": "",
     "storageAccountName": "[concat( 'aegmanager', uniqueString(resourceGroup().id) )]",
@@ -143,6 +144,10 @@
           {
             "name": "UserManagedPrincipalId",
             "value": "[reference(resourceId('Microsoft.ManagedIdentity/userAssignedIdentities/', 'EventGridManagerDeploymentIdentity'), '2018-11-30').principalId]"
+          },
+          {
+            "name": "PackageVersion",
+            "value": "[variables('version')]"
           }
         ],
         "primaryScriptUri": "[variables('deploymentScriptUrl')]",

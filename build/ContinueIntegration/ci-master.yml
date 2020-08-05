@@ -104,6 +104,8 @@ stages:
       value: "https://dotnetdevops.blob.core.windows.net/releases/EventGridManager/1.0.0-ci-$(Build.BuildNumber)/azure/deployment.sh"
     - name: "variables.deploymentScriptUtils"
       value: "https://dotnetdevops.blob.core.windows.net/releases/EventGridManager/1.0.0-ci-$(Build.BuildNumber)/package.zip"
+    - name: "variables.version"
+      value: 1.0.0-ci-$(Build.BuildNumber)
 
     steps: 
     - task: DownloadPipelineArtifact@2

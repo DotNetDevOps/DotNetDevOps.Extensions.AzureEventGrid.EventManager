@@ -11,7 +11,8 @@ storageAccountName="stgaegem"
 packagePath="${publishFolder}/DotNetDevOps.Extensions.AzureEventGrid.EventManagerHost.zip"
 functionsettings=(
 	"PERSISTANT_STORAGE=@Microsoft.KeyVault(VaultName=${keyVaultName};SecretName=storage-${accountName})"
-	"TestAppSetting=TEST"
+	"TestAppSetting=TEST",
+	"PackageVersion=${PackageVersion}"
 )
 
 source utils/helper_azurefunction.sh;
