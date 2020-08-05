@@ -1,5 +1,5 @@
 ﻿
-import * as oidc from "oidc-client";
+
 import Vue from "vue"
 import auth from "../plugins/auth";
 import { AuthService } from "../plugins/auth";
