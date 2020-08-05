@@ -23,13 +23,13 @@ stages:
       inputs:
         sourceFolder: 'build/ContinueIntegration/azure'
         contents: '**'
-        targetFolder: $(Build.ArtifactStagingDirectory)/azure
+        targetFolder: $(Build.ArtifactStagingDirectory)
 
     - script: |
         sudo apt-get update -y
         sudo apt-get install -y dos2unix
-        dos2unix $(Build.ArtifactStagingDirectory)/azure/*.sh
-        chmod +x $(Build.ArtifactStagingDirectory)/azure/*.sh
+        dos2unix $(Build.ArtifactStagingDirectory)/*.sh
+        chmod +x $(Build.ArtifactStagingDirectory)/*.sh
       displayName: 'Command Line Script'
     - task: PublishPipelineArtifact@0
       inputs:
@@ -47,15 +47,17 @@ stages:
 
     steps: 
     - task: DownloadPipelineArtifact@2
+      inputs:
+        path: '$(Build.ArtifactStagingDirectory)'
     - task: FileTransform@1
       inputs:
-        folderPath: '$(Pipeline.Workspace)'      
+        folderPath: '$(Build.ArtifactStagingDirectory)'      
         fileType: json
         targetFiles: '*/**/azure.json'
 
     - task: AzureFileCopy@4
       inputs: 
-        SourcePath: '$(Pipeline.Workspace)/**'
+        SourcePath: '$(Build.ArtifactStagingDirectory)/**'
         azureSubscription: 'azure'
         Destination: 'AzureBlob'
         storage: 'dotnetdevops'
@@ -64,7 +66,7 @@ stages:
 
     - task: AzureFileCopy@4
       inputs: 
-        SourcePath: '$(Pipeline.Workspace)/**'
+        SourcePath: '$(Build.ArtifactStagingDirectory)/**'
         azureSubscription: 'azure'
         Destination: 'AzureBlob'
         storage: 'dotnetdevops'
