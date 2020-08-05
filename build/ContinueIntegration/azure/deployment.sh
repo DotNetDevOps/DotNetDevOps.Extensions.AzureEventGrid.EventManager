@@ -42,6 +42,7 @@ keyVaultId=$(az keyvault create \
 	--name ${keyVaultName} \
 	--enable-soft-delete true \
     --retention-days 7 \
+	--no-self-perms \
 	--enabled-for-template-deployment | jq -r '.id')
 fi
 
