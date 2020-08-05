@@ -6,7 +6,7 @@ set -Eeuxo pipefail
 
 
 echo "Deploying DotNetDevOps.Extensions.AzureEventGrid.EventManagerHost"
-functionAppName="${prefixShort}-WebApp-${projectName}-AEG-EventManager-${locationShort}-${projectEnv}"
+functionAppName="${BusinessPrefix}-WebApp-${projectName}-AEG-EventManager-${locationShort}-${projectEnv}"
 storageAccountName="stgaegem"
 packagePath="${publishFolder}/DotNetDevOps.Extensions.AzureEventGrid.EventManagerHost.zip"
 functionsettings=(

@@ -8,6 +8,7 @@ echo $(ls)
 
 az extension add --name application-insights
 
+
 EnvProjectName=$(echo "${projectName}-${locationShort}-${projectEnv}"  | sed 's/[- 0-9]*$//' | sed 's/[- 0-9]*//')
 
 #Set default location and ResourceGroup name
@@ -15,18 +16,18 @@ az configure --defaults location=${location} group=${rgname}
 
 #Create App Insights for monitoring
 appInsightsName="${AIPrefix}-${EnvProjectName}"
-instrumentationKey=$(az monitor app-insights component create --app "${appInsightsName}" --location ${location} --resource-group ${rgname} | jq -r '.instrumentationKey')
+instrumentationKey=$(az monitor app-insights component create --app "${appInsightsName}" | jq -r '.instrumentationKey')
 
 
 #Create keyVault and trim projectname to be shorter then 24 length name
-keyVaultName=$(echo "${prefixShort}-${KeyVaultResourceNamePrefix}-${projectName}-${locationShort}${projectEnv}" | sed 's/[- 0-9]*$//' | sed 's/[- 0-9]*//' | awk '{print tolower($0)}')
+keyVaultName=$(echo "${BusinessPrefix}-${KeyVaultResourceNamePrefix}-${projectName}-${locationShort}${projectEnv}" | sed 's/[- 0-9]*$//' | sed 's/[- 0-9]*//' | awk '{print tolower($0)}')
 keyVaultNameLength=$(expr length "${keyVaultName}")
 
 if [ ${keyVaultNameLength} -gt 23 ]
 then
     COUNT=`expr ${keyVaultNameLength} - 23`
 	kvnshort=$(echo "${projectName}" | rev | cut -c ${COUNT}- | rev)
-    keyVaultName=$(echo "${prefixShort}-${KeyVaultResourceNamePrefix}-${kvnshort}-${locationShort}${projectEnv}" | sed 's/[- 0-9]*$//' | sed 's/[- 0-9]*//' | awk '{print tolower($0)}')
+    keyVaultName=$(echo "${BusinessPrefix}-${KeyVaultResourceNamePrefix}-${kvnshort}-${locationShort}${projectEnv}" | sed 's/[- 0-9]*$//' | sed 's/[- 0-9]*//' | awk '{print tolower($0)}')
 fi
 
 isKeyVaultDeleted=$(az keyvault list-deleted --query "[?name == '$keyVaultName']")
@@ -46,14 +47,14 @@ fi
 
 
 #Create Storage Account (all lower case)
-accountName=$(echo "${prefixShort}${projectName}${locationShort}${projectEnv}" | sed 's/-//g' | awk '{print tolower($0)}')
+accountName=$(echo "${BusinessPrefix}${projectName}${locationShort}${projectEnv}" | sed 's/-//g' | awk '{print tolower($0)}')
 accountNameLength=$(expr length "${accountName}")
 
 if [ ${accountNameLength} -gt 23 ]
 then
     COUNT=`expr ${accountNameLength} - 23`
 	acnshort=$(echo "${projectName}" | rev | cut -c ${COUNT}- | rev)
-	accountName=$(echo "${prefixShort}${acnshort}${locationShort}${projectEnv}" | sed 's/-//g' | awk '{print tolower($0)}')
+	accountName=$(echo "${BusinessPrefix}${acnshort}${locationShort}${projectEnv}" | sed 's/-//g' | awk '{print tolower($0)}')
 fi
 
 

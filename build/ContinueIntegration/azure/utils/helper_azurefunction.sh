@@ -2,14 +2,14 @@
 set -Eeuxo pipefail
  
 #Create Storage Account (all lower case)
-runtimeStorageAccountName=$(echo "${prefixShort}${storageAccountName}${locationShort}${projectEnv}" | sed 's/-//g' | awk '{print tolower($0)}')
+runtimeStorageAccountName=$(echo "${BusinessPrefix}${storageAccountName}${locationShort}${projectEnv}" | sed 's/-//g' | awk '{print tolower($0)}')
 accountNameLength=$(expr length "${accountName}")
 
 if [ ${accountNameLength} -gt 23 ]
 then
     COUNT=`expr ${accountNameLength} - 23`
 	acnshort=$(echo "${storageAccountName}" | rev | cut -c ${COUNT}- | rev)
-	runtimeStorageAccountName=$(echo "${prefixShort}${acnshort}${locationShort}${projectEnv}" | sed 's/-//g' | awk '{print tolower($0)}')
+	runtimeStorageAccountName=$(echo "${BusinessPrefix}${acnshort}${locationShort}${projectEnv}" | sed 's/-//g' | awk '{print tolower($0)}')
 fi
 
 
